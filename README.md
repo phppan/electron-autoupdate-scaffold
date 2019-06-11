@@ -1,4 +1,4 @@
-# 在Mac下生成 Windows 架构的支持自动更新的 Electron 应用脚手架
+# 在Mac下生成 Windows 32 架构的支持自动更新的 Electron 应用脚手架
 
 调整了一些版本的依赖，在mac 10.11.6下可以运行 xcode8.2.1
 
