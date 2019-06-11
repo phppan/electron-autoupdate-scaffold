@@ -6,7 +6,12 @@ const {
     ipcMain
 } = require('electron');
 const { autoUpdater } = require('electron-updater');
-const feedUrl = `http://127.0.0.1:8080/${process.platform}`;
+const debug = /--debug/.test(process.argv[2])
+
+//package = require("./package.json");
+//const feedUrl = package.publish
+//console.log(feedUrl)
+const feedUrl = `http://39.108.183.230/windemo/v2`;
 
 let webContents;
 
@@ -28,6 +33,7 @@ let createWindow = () => {
             slashes: true
         })
     );
+    app.setApplicationMenu(null);//关闭菜单栏
 
     webContents.openDevTools();
 };
@@ -37,35 +43,42 @@ let sendUpdateMessage = (message, data) => {
 };
 
 let checkForUpdates = () => {
-    autoUpdater.setFeedURL(feedUrl);
+    try{
+        console.log(feedUrl)
+        autoUpdater.setFeedURL(feedUrl);
 
-    autoUpdater.on('error', function (message) {
-        sendUpdateMessage('error', message)
-    });
-    autoUpdater.on('checking-for-update', function (message) {
-        sendUpdateMessage('checking-for-update', message)
-    });
-    autoUpdater.on('update-available', function (message) {
-        sendUpdateMessage('update-available', message)
-    });
-    autoUpdater.on('update-not-available', function (message) {
-        sendUpdateMessage('update-not-available', message)
-    });
+        autoUpdater.on('error', function (message) {
+            console.log("error")
+            sendUpdateMessage('error', message)
+        });
+        autoUpdater.on('checking-for-update', function (message) {
+            sendUpdateMessage('checking-for-update', message)
+        });
+        autoUpdater.on('update-available', function (message) {
+            sendUpdateMessage('update-available', message)
+        });
+        autoUpdater.on('update-not-available', function (message) {
+            sendUpdateMessage('update-not-available', message)
+        });
 
-    // 更新下载进度事件
-    autoUpdater.on('download-progress', function (progressObj) {
-        sendUpdateMessage('downloadProgress', progressObj)
-    })
-    autoUpdater.on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
-        ipcMain.on('updateNow', (e, arg) => {
-            //some code here to handle event
-            autoUpdater.quitAndInstall();
+        // 更新下载进度事件
+        autoUpdater.on('download-progress', function (progressObj) {
+            sendUpdateMessage('downloadProgress', progressObj)
         })
-        sendUpdateMessage('isUpdateNow');
-    });
+        autoUpdater.on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
+            ipcMain.on('updateNow', (e, arg) => {
+                //some code here to handle event
+                autoUpdater.quitAndInstall();
+            })
+            sendUpdateMessage('isUpdateNow');
+        });
 
-    //执行自动更新检查
-    autoUpdater.checkForUpdates();
+        //执行自动更新检查
+        autoUpdater.checkForUpdates();
+    }catch(err){
+        sendUpdateMessage('exception', err)
+    }
+    console.log("update")
 };
 
 app.on('ready', () => {

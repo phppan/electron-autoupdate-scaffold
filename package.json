@@ -1,20 +1,42 @@
 {
-  "name": "electron-autoupdate-scaffold",
-  "version": "1.0.0",
+  "name": "electron-autoupdate-hello",
+  "version": "1.0.1",
   "description": "Windows 下支持自动更新的 Electron 应用脚手架",
   "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --debug",
+    "dist": "electron-builder -w"
+  },
   "build": {
-    "appId": "com.xxx.app",
+    "electronVersion": "2.0.1",
+    "win": {
+      "requestedExecutionLevel": "highestAvailable",
+      "icon": "app.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "ia32"
+          ]
+        }
+      ]
+    },
+    "appId": "com.hello.id",
+    "artifactName": "hello.${version}.${ext}",
+    "nsis": {
+      "artifactName": "hello.${version}.${ext}",
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false
+    },
     "publish": [
       {
         "provider": "generic",
-        "url": "http://127.0.0.1:8080"
+        "url": "http://ip/windemo/v2"
       }
     ]
-  },
-  "scripts": {
-    "start": "electron .",
-    "build": "electron-builder -w"
   },
   "repository": {
     "type": "git",
@@ -28,9 +50,11 @@
   "homepage": "https://github.com/ganyouyin/electron-autoupdate-scaffold#readme",
   "devDependencies": {
     "electron": "^2.0.1",
-    "electron-builder": "^20.15.0"
+    "electron-builder": "^20.31.2"
   },
   "dependencies": {
-    "electron-updater": "^2.21.10"
+    "electron-packager": "^13.1.1",
+    "electron-updater": "^3.0.3",
+    "wine": "^0.9.8"
   }
 }

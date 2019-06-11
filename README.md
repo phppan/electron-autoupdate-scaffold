@@ -1,12 +1,17 @@
 # Windows 下支持自动更新的 Electron 应用脚手架
 
+调整了一些版本的依赖，在mac 10.11.6下可以运行 xcode8.2.1
+
+Electron 在Mac下可以编译生成 Win32 的安装包
+
+
 ## 使用
 
 1. 下载应用
 
 	```bash
 	# 工作目录下，比如 d/workspace
-	git clone https://github.com/ganyouyin/electron-autoupdate-scaffold.git
+	git clone https://github.com/phppan/electron-autoupdate-scaffold.git
 	npm i
 	```
 
@@ -28,18 +33,6 @@
 	
 	```bash
 	npm run build
-
-	> electron-autoupdate-scaffold@0.0.1 build D:\honey\electron-autoupdate-scaffold
-	> electron-builder -w
-
-  	• electron-builder version=20.15.0
-  	• loaded configuration file=package.json ("build" field)
-  	• writing effective config file=dist\electron-builder-effective-config.yaml
-  	• no native production dependencies
-	• packaging platform=win32 arch=x64 electron=2.0.1 appOutDir=dist\win-unpacked
-	• default Electron icon is used reason=application icon is not set
-	• building target=nsis file=dist\electron-autoupdate-scaffold Setup 0.0.1.exe archs=x64 oneClick=true
-	• building block map blockMapFile=dist\electron-autoupdate-scaffold Setup 0.0.1.exe.blockmap
 	```
 
 	第一次运行会比较慢，运行结束后会在当前目录下新增一个 dist 文件夹，dist 的目录结构如下：
@@ -47,21 +40,18 @@
 	```bash
 	|- dist
 	  |- win-unpacked
-	  |- electron-autoupdate-scaffold Setup.exe
-	  |- electron-autoupdate-scaffold Setup.exe.blockmap
+	  |- hello.1.0.0.exe
+	  |- hello.1.0.0.exe.blockmap
 	  |- electron-builder-effective-config.yaml
 	  |- latest.yml
 	```
 
 	win-unpacked 下是可执行文件。
 
-4. 运行自动更新后台
+4. 自动更新后台
 
 	```bash
-	# 工作目录下，比如 d/workspace
-	git clone https://github.com/ganyouyin/electron-autoupdate-server.git
-	npm i
-	npm start
+    这里我是直接把 生成的latest.yml和exe安装包扔到一台装有nginx的机器，访问目录为：windemo/v2
 	```
 
 	将之前打包出来的 dist 目录下的 4 个文件（除了 win-unpacked）拷贝到这边的 packages/win32 下（需要手动新建目录 packages/win32）。
@@ -81,6 +71,7 @@
 		update-available
 		```
 		并且出现弹窗提示「现在更新？」。
+        如果网速慢的话，这里会有等候，可以看到devtools里面有进度的打印
 
 ## 基于脚手架开发
 
@@ -103,4 +94,4 @@
 
 ## 支持
 
-任何使用问题请戳[这里](https://github.com/ganyouyin/electron-autoupdate-scaffold/issues)。
+任何使用问题请戳[这里](https://github.com/phppan/electron-autoupdate-scaffold/issues)。
